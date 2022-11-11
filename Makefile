@@ -1,7 +1,7 @@
 TARGET=openvcl
 
 SRCDIR=src
-OBJDIR=obj
+OBJDIR=src
 DEPENDFILE=.depend
 TMP=/tmp
 PACKAGE=openvcl$(VCLVERSION)
@@ -13,7 +13,7 @@ OBJECTS=$(subst $(SRCDIR)/,$(OBJDIR)/,$(patsubst %.cpp,%.o,$(SOURCES)))
 CXXFLAGS:=$(CXXFLAGS) -ansi -pedantic -Wall -Werror -g
 LDFLAGS:=$(LDFLAGS) -g
 
-.PHONY: all examples clean distclean package install
+.PHONY: all clean distclean package install
 
 ifneq (,$(findstring install,$(MAKECMDGOALS)))
 ifeq (,$(PREFIX))
@@ -28,20 +28,16 @@ $(warning Installation root is set to $(PREFIX).)
 endif
 endif
 
-all:	$(OBJDIR) $(TARGET) examples
+all:	$(OBJDIR) $(TARGET)
 
 $(TARGET): $(OBJDIR) $(OBJECTS)
 	$(CXX) $(LDFLAGS) -o $(TARGET) $(OBJECTS)
 
-examples:
-	$(MAKE) -C examples all
-
 clean:
-	$(MAKE) -C examples clean
 	-rm -f $(TARGET) $(OBJECTS)
 
 distclean: clean
-	-$(MAKE) -C examples clean
+	-$(MAKE) -C clean
 	-$(MAKE) -C contrib/masp distclean
 	-rm -f $(DEPENDFILE) src/*~ *~
 	-rmdir $(OBJDIR)
@@ -61,9 +57,6 @@ install: $(OBJDIR) $(TARGET)
 # compile c file
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
 
 # automatic dependency updates
 $(DEPENDFILE): $(SOURCES) $(HEADERS)
