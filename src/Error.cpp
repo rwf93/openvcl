@@ -3,6 +3,9 @@
 #include <iostream>
 #include <sstream>
 
+#include <stdio.h>
+#include <stdlib.h>
+
 namespace vcl
 {
 
@@ -146,7 +149,8 @@ std::string Error::toString() const
 
 void Error::Display( const Error& e )
 {
-	std::cerr << e.toString() << std::endl;
+	std::cerr << "\033[1;31m" << e.toString() << "\033[0m\n" << std::endl;
+	exit(1);
 }
 
 }
