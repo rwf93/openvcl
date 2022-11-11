@@ -149,8 +149,12 @@ std::string Error::toString() const
 
 void Error::Display( const Error& e )
 {
-	std::cerr << "\033[1;31m" << e.toString() << "\033[0m\n" << std::endl;
-	exit(1);
+	if(!e.m_warning) {
+		std::cerr << "\033[1;31m" << e.toString() << "\033[0m\n" << std::endl;
+		exit(1);
+	}
+
+	std::cerr << "\033[1;33m" << e.toString() << "\033[0m" << std::endl;
 }
 
 }
